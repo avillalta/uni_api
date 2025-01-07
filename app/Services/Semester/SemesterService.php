@@ -2,7 +2,7 @@
 
 namespace App\Services\Semester;
 
-use App\Models\Semester;
+use App\Models\Semester\Semester;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Arr;

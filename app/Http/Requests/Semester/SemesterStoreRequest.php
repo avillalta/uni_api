@@ -26,7 +26,7 @@ class SemesterStoreRequest extends FormRequest
             'name' => ['required', 'string', 'max:255', 'unique:semesters'],
             'start_date' => ['required', 'date', 'before:end_date'],
             'end_date' => ['required', 'date', 'after:start_date'],
-            'calendar' => ['nullable', 'json'],
+            'calendar' => ['nullable', 'array'],
         ];
     }
 
@@ -72,7 +72,7 @@ class SemesterStoreRequest extends FormRequest
     {
         $validated = $this->validated();
         $validated['calendar'] = isset($validated['calendar'])
-            ? SemesterCalendarData::fromArray(json_decode($validated['calendar'], true))
+            ? SemesterCalendarData::fromArray($validated['calendar'], true)
             : new SemesterCalendarData();
 
         return $validated;

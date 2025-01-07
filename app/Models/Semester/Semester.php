@@ -22,15 +22,23 @@ class Semester extends Model
 
     public function getCalendarAttribute($value)
     {
-        return SemesterCalendarData::fromArray($value ?? []);
+        $decodedValue = is_string($value) ? json_decode($value, true) : $value;
+
+        return SemesterCalendarData::fromArray($decodedValue ?? []);
+        //return SemesterCalendarData::fromArray($value ?? []);
     }
 
     public function setCalendarAttribute($value)
     {
-        if ($value instanceof SemesterCalendarData) {
-            $this->attributes['calendar'] = $value->toArray();
+        if (is_array($value)) {
+            // Convierte el array en JSON antes de guardarlo
+            $this->attributes['calendar'] = json_encode($value);
+        } elseif ($value instanceof SemesterCalendarData) {
+            // Si es un objeto, lo convertimos a un array y luego a JSON
+            $this->attributes['calendar'] = json_encode($value->toArray());
         } else {
-            $this->attributes['calendar'] = $value;
+            // Si no es nada de lo anterior, lo dejamos como un JSON vacío
+            $this->attributes['calendar'] = json_encode([]);
         }
     }
 }

@@ -8,7 +8,7 @@ use App\Http\Requests\Semester\SemesterUpdateRequest;
 use App\Http\Resources\Semester\SemesterResource;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Response;
-use App\Models\Semester;
+use App\Models\Semester\Semester;
 use Illuminate\Http\Request;
 use App\Services\Semester\SemesterService;
 

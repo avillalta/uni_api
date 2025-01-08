@@ -24,11 +24,18 @@ class SemesterUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $semester = $this->route('semester');
+        if (is_numeric($semester)) {
+        $semester = \App\Models\Semester\Semester::find($semester);
+        }
+        $startDate = $semester ? $semester->start_date : null;
+        $endDate = $semester ? $semester->end_date : null;
+
         return [
             'name' => ['sometimes','string', 'max:255', Rule::unique('semesters')->ignore($this->semester)],
-            'start_date' => ['sometimes', 'date', 'before:end_date'],
-            'end_date' => ['sometimes', 'date', 'after:start_date'],
-            'calendar' => ['nullable', 'json']
+            'start_date' => ['sometimes', 'date', 'before:' . ($endDate ?? 'end_date')],
+            'end_date' => ['sometimes', 'date', 'after:' . ($startDate ?? 'start_date')],
+            'calendar' => ['nullable', 'array']
         ];
     }
 
@@ -40,8 +47,8 @@ class SemesterUpdateRequest extends FormRequest
     public function validatedData(): array
     {
         $validated = $this->validated();
-        $validated['calendar'] = isset($validated['calendar']) 
-            ? SemesterCalendarData::fromArray(json_decode($validated['calendar'], true))
+        $validated['calendar'] = isset($validated['calendar'])
+            ? SemesterCalendarData::fromArray($validated['calendar'], true)
             : new SemesterCalendarData();
 
         return $validated;

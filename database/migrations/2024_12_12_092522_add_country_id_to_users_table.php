@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('country_id')->nullable()->after('date_of_birth'); // Añadir nullable antes de constrained
+            $table->foreignId('country_id')->nullable()->after('date_of_birth'); 
             $table->foreign('country_id')
                   ->references('id')
                   ->on('countries')

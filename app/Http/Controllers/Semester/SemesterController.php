@@ -19,9 +19,9 @@ class SemesterController extends Controller
 
     protected $SemesterService;
 
-    public function __construct(SemesterService $semesterService)
+    public function __construct(SemesterService $SemesterService)
     {
-        $this->SemesterService = $semesterService;
+        $this->SemesterService = $SemesterService;
     }
 
     /**

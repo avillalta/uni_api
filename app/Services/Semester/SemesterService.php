@@ -79,8 +79,8 @@ class SemesterService{
     public function deleteSemester($id)
     {
         DB::transaction(function() use ($id) {
-            $user = Semester::findOrFail($id);
-            $user->delete();
+            $semester = Semester::findOrFail($id);
+            $semester->delete();
         });
     }
 

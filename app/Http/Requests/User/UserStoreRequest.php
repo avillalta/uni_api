@@ -17,6 +17,21 @@ class UserStoreRequest extends FormRequest
     }
 
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        
+        if ($this->has('role')) {
+            $this->merge([
+                'role' => strtolower($this->input('role')), 
+            ]);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -35,7 +50,7 @@ class UserStoreRequest extends FormRequest
             'date_of_birth' => ['required', 'date', 'before:today'],
             'country_id' => ['required', 'exists:countries,id'],
 
-            'role' => ['nullable', 'string', 'in:admin,professor,student'], // Validación para el rol
+            'role' => ['nullable', 'string', 'in:admin,professor,student'],
         ];
             //flag para ver que rol le pongo
     }

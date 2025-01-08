@@ -4,6 +4,7 @@ namespace App\Models\Semester;
 
 use App\Data\Semester\SemesterCalendarData;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Signature\Signature;
 
 class Semester extends Model
 {
@@ -40,5 +41,14 @@ class Semester extends Model
             // Si no es nada de lo anterior, lo dejamos como un JSON vacío
             $this->attributes['calendar'] = json_encode([]);
         }
+    }
+
+    /**
+     * Relationship with Signature.
+     * A Semester can have many Signatures.
+     */
+    public function signatures()
+    {
+        return $this->hasMany(Signature::class);
     }
 }

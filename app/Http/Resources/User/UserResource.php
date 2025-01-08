@@ -25,7 +25,8 @@ class UserResource extends JsonResource
             'city' => $this->city,
             'postal_code' => $this->postal_code,
             'address' => $this->address,
-            'date_of_birth' => $this->date_of_birth
+            'date_of_birth' => $this->date_of_birth,
+            'role' => $this->roles->pluck('name')->first()
         ];
     }
 }

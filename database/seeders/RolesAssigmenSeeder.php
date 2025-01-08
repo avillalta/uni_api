@@ -11,9 +11,9 @@ class RolesAssigmenSeeder extends Seeder
 {
     public function run(): void
     {
-        $studentRole = Role::findByName('Student');
-        $professorRole = Role::findByName('Professor');
-        $adminRole = Role::findByName('Admin');
+        $studentRole = Role::findByName('student');
+        $professorRole = Role::findByName('professor');
+        $adminRole = Role::findByName('admin');
 
         $viewSemesterPermission = Permission::whereName('view-Semester')->first();
 

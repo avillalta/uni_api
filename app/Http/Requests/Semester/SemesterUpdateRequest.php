@@ -39,6 +39,28 @@ class SemesterUpdateRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'name.sometimes' => 'The :attribute field is optional, but if provided, it must be a string.',
+            'name.string' => 'The :attribute must be a string.',
+            'name.max' => 'The :attribute may not be greater than 255 characters.',
+            'name.unique' => 'The :attribute has already been taken.',
+
+            'start_date.sometimes' => 'The :attribute field is optional, but if provided, it must be a valid date.',
+            'start_date.date' => 'The :attribute must be a valid date.',
+            'start_date.before' => 'The :attribute must be before the end date.',
+
+            'end_date.sometimes' => 'The :attribute field is optional, but if provided, it must be a valid date.',
+            'end_date.date' => 'The :attribute must be a valid date.',
+            'end_date.after' => 'The :attribute must be after the start date.',
+
+            'calendar.sometimes' => 'The :attribute field is optional, but if provided, it must be an array.',
+            'calendar.array' => 'The :attribute must be an array.',
+        ];
+    }
+
+
     /**
      * Transform the validated data into a structured format using DTO
      *

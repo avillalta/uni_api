@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Http\Requests\Course;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class CourseUpdateRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'schedule' => ['sometimes', 'array'],
+            'weighting' => ['sometimes', 'array', 'size:3'], // Optional, must be an array with 3 elements
+            'weighting.homework' => ['required_with:weighting', 'numeric', 'min:0', 'max:1'],
+            'weighting.midterms' => ['required_with:weighting', 'numeric', 'min:0', 'max:1'],
+            'weighting.final_exam' => ['required_with:weighting', 'numeric', 'min:0', 'max:1'],
+            'weighting.*' => function ($attribute, $value, $fail) {
+                if (request('weighting') && array_sum(request('weighting')) !== 1) {
+                    $fail('The weighting values must add up to 1.');
+                }
+            },
+            'signature_id' => ['sometimes', 'exists:signatures,id'],
+            'semester_id' => ['sometimes', 'exists:semesters,id'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'schedule.sometimes' => 'The :attribute field is optional, but if provided, it must be a valid JSON format.',
+            'schedule.json' => 'The :attribute must be a valid JSON.',
+
+            'weighting.sometimes' => 'The weighting field is optional, but if provided, it must be an array.',
+            'weighting.array' => 'The weighting field must be an array.',
+            'weighting.size' => 'The weighting array must contain exactly 3 elements.',
+            'weighting.*.required_with' => 'Each weighting value (:attribute) is required when weighting is provided.',
+            'weighting.*.numeric' => 'Each weighting value (:attribute) must be numeric.',
+            'weighting.*.min' => 'Each weighting value (:attribute) must be at least :min.',
+            'weighting.*.max' => 'Each weighting value (:attribute) must not exceed :max.',
+            
+            'signature_id.sometimes' => 'The :attribute field is optional, but if provided, it must be a valid signature ID',
+            'signature_id.exists' => 'The selected :attribute is invalid.',
+
+            'semester_id.sometimes' => 'The :attribute field is optional, but if provided, it must be a valid semester ID.',
+            'semester_id.exists' => 'The selected :attribute is invalid.'
+        ];
+    }
+}

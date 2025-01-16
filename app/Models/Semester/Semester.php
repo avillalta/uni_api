@@ -3,6 +3,7 @@
 namespace App\Models\Semester;
 
 use App\Data\Semester\SemesterCalendarData;
+use App\Models\Course\Course;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Signature\Signature;
 
@@ -43,12 +44,8 @@ class Semester extends Model
         }
     }
 
-    /**
-     * Relationship with Signature.
-     * A Semester can have many Signatures.
-     */
-    public function signatures()
+    public function courses()
     {
-        return $this->hasMany(Signature::class);
+        return $this->hasMany(Course::class, 'semester_id');
     }
 }

@@ -14,14 +14,8 @@ return new class extends Migration
         Schema::create('signatures', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->json('units')->nullable();
-            $table->json('schedule')->nullable();
-            $table->foreignId('semester_id')->nullable(); 
-            $table->foreign('semester_id')
-                ->references('id')
-                ->on('semesters')
-                ->nullOnDelete()
-                ->cascadeOnUpdate();
+            $table->json('syllabus')->nullable();
+            $table->string('syllabus_pdf')->nullable();
             $table->foreignId('professor_id')->nullable();
             $table->foreign('professor_id')
                 ->references('id')
@@ -39,7 +33,6 @@ return new class extends Migration
     {
         Schema::table('signatures', function (Blueprint $table) {
             
-            $table->dropForeign(['semester_id']);
             $table->dropForeign(['professor_id']);
         });
 

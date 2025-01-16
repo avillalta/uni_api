@@ -5,6 +5,7 @@ namespace App\Services\Signature;
 use App\Models\Signature\Signature;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
@@ -30,16 +31,21 @@ class SignatureService{
      * @param array $data
      * @return \App\Models\Signature
      */
-    public function saveSignature(array $data) {
+    public function saveSignature(array $data , $pdfFile) {
 
         return DB::transaction(function() use ($data){
-            return Signature::create([
+            $signature = Signature::create([
                 'name' => $data['name'],
-                'units' => $data['units'],
-                'schedule' => $data['schedule'],
-                'semester_id' => $data['semester_id'],
+                'syllabus' => json_encode($data['syllabus'] ?? []),
                 'professor_id' => $data['professor_id'],
             ]);
+
+            if (isset($data['syllabus_pdf'])) {
+                $signature->addMedia($data['syllabus_pdf'])
+                          ->toMediaCollection('syllabus_pdf');
+            }
+
+            return $signature;
         });
     }
 
@@ -68,12 +74,15 @@ class SignatureService{
         return DB::transaction(function() use ($signature, $data){
             $updates =  [
                 'name' => $data['name'] ?? $signature->name,
-                'units' => $data['units'] ?? $signature->units,
-                'schedule' => $data['schedule'] ?? $signature->schedule,
-                'semester_id' => $data['semester_id'] ?? $signature->semester_id,
+                'syllabus' => isset($data['syllabus']) ? json_encode($data['syllabus']) : $signature->syllabus,
                 'professor_id' => $data['professor_id'] ?? $signature->professor_id,
             ];
             $signature->update($updates);
+
+            if (isset($data['syllabus_pdf'])) {
+                $signature->clearMediaCollection('syllabus_pdf');
+                $signature->addMedia($data['syllabus_pdf'])->toMediaCollection('syllabus_pdf');
+            }
             return $signature;
         });
     }

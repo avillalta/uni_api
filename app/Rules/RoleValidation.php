@@ -34,10 +34,5 @@ class RoleValidation implements ValidationRule
         } elseif (!$user->hasRole($this->role)) {
             $fail("The selected {$attribute} does not belong to a user with the {$this->role} role.");
         }
-        //$roles = $user->getRoleNames()->implode(', ');
-
-        /**if (!$user->hasRole($this->role)) {
-            $fail("The selected {$attribute} does not belong to a user with the {$this->role} role.");
-        }**/
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Signature;
+namespace App\Http\Resources\Course;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SignatureResource extends JsonResource
+class CourseResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +17,10 @@ class SignatureResource extends JsonResource
         //return parent::toArray($request);
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'syllabus' => json_decode($this->syllabus, true),
-            'syllabus_pdf_url' => $this->syllabus_pdf_url,
-            'professor_id' => $this->professor?->name
+            'schedule' => $this->schedule,
+            'weighting' => $this->weighting,
+            'signature' => $this->signature?->name,
+            'semester' => $this->semester?->name,
         ];
     }
 }

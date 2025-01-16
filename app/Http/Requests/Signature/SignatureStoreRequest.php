@@ -25,10 +25,27 @@ class SignatureStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'units' => ['nullable', 'array'],
-            'schedule' => ['nullable', 'array'],
-            'semester_id' => ['nullable', 'exists:semesters,id'],
+            'syllabus' => ['nullable', 'array'],
+            'syllabus_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'professor_id' => ['nullable', 'exists:users,id', new RoleValidation('professor')],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => ':attribute is required.',
+            'name.string' => ':attribute must be a string.',
+            'name.max' => ':attribute may not be greater than :max characters.',
+            
+            'syllabus.array' => ':attribute must be a valid array.',
+            
+            'syllabus_pdf.file' => ':attribute must be a valid file.',
+            'syllabus_pdf.mimes' => ':attribute must be a PDF file.',
+            'syllabus_pdf.max' => ':attribute may not be greater than :max kilobytes.',
+            
+            'professor_id.exists' => ':attribute does not exist in the database.',
+            'professor_id.professor' => ':attribute must be assigned a professor role.',
         ];
     }
 }

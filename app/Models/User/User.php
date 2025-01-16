@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Country\Country;
+use App\Models\Enrollment\Enrollment;
+use App\Models\Signature\Signature;
 
 class User extends Authenticatable
 {
@@ -60,5 +62,21 @@ class User extends Authenticatable
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    /**
+     * Get all the signatures assigned to the professor.
+     */
+    public function signatures()
+    {
+        return $this->hasMany(Signature::class, 'professor_id');
+    }
+
+     /**
+     * Get all of the enrollments for the student.
+     */
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'student_id');
     }
 }

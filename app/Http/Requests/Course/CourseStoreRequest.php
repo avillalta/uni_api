@@ -43,19 +43,21 @@ class CourseStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'weighting.required' => 'The weighting field is required.',
-            'weighting.array' => 'The weighting field must be an array.',
-            'weighting.size' => 'The weighting array must contain exactly 3 elements.',
+            'schedule.array' => 'The :attribute field must be an array.',
+
+            'weighting.required' => 'The :attribute field is required.',
+            'weighting.array' => 'The :attribute field must be an array.',
+            'weighting.size' => 'The :attribute array must contain exactly 3 elements.',
             'weighting.*.required' => 'The :attribute weighting is required.',
             'weighting.*.numeric' => 'The :attribute weighting must be a numeric value.',
             'weighting.*.min' => 'The :attribute weighting must be at least :min.',
             'weighting.*.max' => 'The :attribute weighting must not exceed :max.',
 
-            'signature_id.required' => 'The signature field is required.',
-            'signature_id.exists' => 'The selected signature does not exist.',
+            'signature_id.required' => 'The :attribute field is required.',
+            'signature_id.exists' => 'The :attribute signature does not exist.',
 
-            'semester_id.required' => 'The semester field is required.',
-            'semester_id.exists' => 'The selected semester does not exist.',
+            'semester_id.required' => 'The :attribute field is required.',
+            'semester_id.exists' => 'The :attribute semester does not exist.',
         ];
     }
 }

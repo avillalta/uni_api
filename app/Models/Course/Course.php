@@ -4,10 +4,14 @@ namespace App\Models\Course;
 
 use App\Models\Semester\Semester;
 use App\Models\Signature\Signature;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
+    
+    use HasUuids;
+
     protected $fillable = [
         'schedule',
         'weighting',

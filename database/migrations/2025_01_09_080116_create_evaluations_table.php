@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('evaluations', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->enum('evaluation_type', ['ordinary', 'extraordinary'])->default('ordinary');
+            $table->date('evaluation_date');
+            $table->
+
+            $table->timestamps();
         });
     }
 

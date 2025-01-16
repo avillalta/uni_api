@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->json('schedule')->nullable();
-            $table->json('weighting')->nullable();
+            $table->json('weighting');
             $table->foreignId('signature_id')->nullable();
             $table->foreign('signature_id')
                 ->references('id')

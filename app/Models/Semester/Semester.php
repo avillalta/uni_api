@@ -6,9 +6,13 @@ use App\Data\Semester\SemesterCalendarData;
 use App\Models\Course\Course;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Signature\Signature;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Semester extends Model
 {
+
+    use HasUuids;
+
     protected $fillable = [
         'name',
         'start_date',

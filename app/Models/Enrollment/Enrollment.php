@@ -6,10 +6,13 @@ use App\Models\Course\Course;
 use App\Models\Evaluation\Evaluation;
 use App\Models\Signature\Signature;
 use App\Models\User\User;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Enrollment extends Model
 {
+    use HasUuids;
+
     protected $fillable = [
         'enrollment_date',
         'course_id',

@@ -11,11 +11,12 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Country\Country;
 use App\Models\Enrollment\Enrollment;
 use App\Models\Signature\Signature;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, HasApiTokens;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, HasUuids;
 
     /**
      * The attributes that are mass assignable.

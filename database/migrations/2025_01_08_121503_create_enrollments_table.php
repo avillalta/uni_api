@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('enrollments', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->date('enrollment_date');
             $table->foreignId('course_id')->nullable(); 
             $table->foreign('signature_id')

@@ -35,12 +35,12 @@ class EnrollmentUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'course_id.exists' => 'The selected course does not exist.',
+            'course_id.exists' => 'The selected :attribute does not exist.',
             
-            'student_id.exists' => 'The selected student does not exist.',
+            'student_id.exists' => 'The selected :attribute does not exist.',
 
-            'enrollment_date.date' => 'The enrollment date must be a valid date.',
-            'enrollment_date.before_or_equal' => 'The enrollment date cannot be in the future.',
+            'enrollment_date.date' => 'The :attribute must be a valid date.',
+            'enrollment_date.before_or_equal' => 'The :attribute cannot be in the future.',
         ];
     }
 }

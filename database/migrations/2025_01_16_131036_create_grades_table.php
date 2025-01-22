@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('signatures', function (Blueprint $table) {
+        Schema::create('grades', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->json('syllabus')->nullable();
-            $table->string('syllabus_pdf')->nullable();
-            $table->uuid('professor_id')->nullable();
-            $table->foreign('professor_id')
+            $table->enum('grade_type', ['ordinary', 'extraordinary', 'work', 'partial', 'final']);
+            $table->decimal('grade_value', 5, 2)->nullable();
+            $table->date('grade_date');
+            $table->uuid('enrollment_id')->nullable(); 
+            $table->foreign('enrollment_id')
                 ->references('id')
-                ->on('users')
+                ->on('enrollments')
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
             $table->timestamps();
@@ -31,11 +31,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('signatures', function (Blueprint $table) {
+        Schema::table('grades', function (Blueprint $table) {
             
-            $table->dropForeign(['professor_id']);
+            $table->dropForeign(['enrollment_id']);
         });
 
-        Schema::dropIfExists('signatures');
+        Schema::dropIfExists('grades');
     }
 };

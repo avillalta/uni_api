@@ -4,6 +4,7 @@ namespace App\Models\Enrollment;
 
 use App\Models\Course\Course;
 use App\Models\Evaluation\Evaluation;
+use App\Models\Grade\Grade;
 use App\Models\Signature\Signature;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -39,8 +40,8 @@ class Enrollment extends Model
         return $this->belongsTo(User::class, 'student_id');
     }
 
-    public function evaluations()
+    public function grades()
     {
-        return $this->hasMany(Evaluation::class, 'enrollment_id');
+        return $this->hasMany(Grade::class, 'enrollment_id');
     }
 }

@@ -32,8 +32,8 @@ class CourseStoreRequest extends FormRequest
                     $fail('The weighting values must add up to 1.');
                 }
             },
-            'signature_id' => ['required', 'exists:signatures,id'],
-            'semester_id' => ['required', 'exists:semesters,id'],
+            'signature_id' => ['required', 'uuid', 'exists:signatures,id'],
+            'semester_id' => ['required', 'uuid', 'exists:semesters,id'],
         ];
     }
 

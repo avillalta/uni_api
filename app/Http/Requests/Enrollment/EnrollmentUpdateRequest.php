@@ -23,8 +23,8 @@ class EnrollmentUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'course_id' => ['sometimes', 'exists:courses,id'],
-            'student_id' => ['sometimes', 'exists:users,id', new RoleValidation('student')],
+            'course_id' => ['sometimes', 'uuid', 'exists:courses,id'],
+            'student_id' => ['sometimes', 'uuid', 'exists:users,id', new RoleValidation('student')],
             'enrollment_date' => ['sometimes', 'date', 'before_or_equal:today']
         ];
     }

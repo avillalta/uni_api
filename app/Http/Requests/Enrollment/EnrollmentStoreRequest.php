@@ -23,8 +23,8 @@ class EnrollmentStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'course_id' => ['required', 'exists:courses,id'],
-            'student_id' => ['required', 'exists:users,id', new RoleValidation('student')],
+            'course_id' => ['required', 'uuid', 'exists:courses,id'],
+            'student_id' => ['required', 'uuid', 'exists:users,id', new RoleValidation('student')],
             'enrollment_date' => ['required', 'date', 'before_or_equal:today']
         ];
     }

@@ -27,7 +27,7 @@ class SignatureStoreRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'syllabus' => ['nullable', 'array'],
             'syllabus_pdf' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-            'professor_id' => ['nullable', 'exists:users,id', new RoleValidation('professor')],
+            'professor_id' => ['nullable', 'uuid', 'exists:users,id', new RoleValidation('professor')],
         ];
     }
 

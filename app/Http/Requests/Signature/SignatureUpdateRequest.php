@@ -27,7 +27,7 @@ class SignatureUpdateRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'syllabus' => ['sometimes', 'array'],
             'syllabus_pdf' => ['sometimes', 'file', 'mimes:pdf', 'max:10240'],
-            'professor_id' => ['sometimes', 'exists:users,id', new RoleValidation('professor')],
+            'professor_id' => ['sometimes', 'uuid', 'exists:users,id', new RoleValidation('professor')],
         ];
     }
 

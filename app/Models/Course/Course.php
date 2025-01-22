@@ -2,6 +2,7 @@
 
 namespace App\Models\Course;
 
+use App\Models\Content\Content;
 use App\Models\Semester\Semester;
 use App\Models\Signature\Signature;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -32,5 +33,10 @@ class Course extends Model
     public function semester()
     {
         return $this->belongsTo(Semester::class, 'semester_id');
+    }
+
+    public function contents()
+    {
+        return $this->hasMany(Content::class); 
     }
 }

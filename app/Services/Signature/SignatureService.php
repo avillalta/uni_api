@@ -31,7 +31,7 @@ class SignatureService{
      * @param array $data
      * @return \App\Models\Signature
      */
-    public function saveSignature(array $data , $pdfFile) {
+    public function saveSignature(array $data) {
 
         return DB::transaction(function() use ($data){
             $signature = Signature::create([

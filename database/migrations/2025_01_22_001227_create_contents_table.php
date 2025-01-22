@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('enrollments', function (Blueprint $table) {
+        Schema::create('contents', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->date('enrollment_date');
-            $table->decimal('final_grade', 5, 2)->default(0.00)->nullable();
+            $table->string('name');
+            $table->text('description');
+            $table->text('bibliography')->nullable();
+            $table->integer('order');
             $table->uuid('course_id')->nullable(); 
             $table->foreign('course_id')
                 ->references('id')
                 ->on('courses')
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
-            $table->uuid('student_id')->nullable();
-            $table->foreign('student_id')
+            $table->uuid('grade_id')->nullable(); 
+            $table->foreign('grade_id')
                 ->references('id')
-                ->on('users')
+                ->on('grades')
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
             $table->timestamps();
@@ -36,12 +38,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('enrollments', function (Blueprint $table) {
+        Schema::table('contents', function (Blueprint $table) {
             
             $table->dropForeign(['course_id']);
-            $table->dropForeign(['student_id']);
+            $table->dropForeign(['grade_id']);
         });
 
-        Schema::dropIfExists('enrollments');
+        Schema::dropIfExists('contents');
     }
 };

@@ -35,6 +35,7 @@ class EnrollmentResource extends JsonResource
                 'id' => $this->student_id,
                 'name' => $this->student->name,
             ],
+            'final_grade' => $this->final_grade,
         ];
     }
 }

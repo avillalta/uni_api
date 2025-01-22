@@ -15,13 +15,13 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->json('schedule')->nullable();
             $table->json('weighting');
-            $table->foreignId('signature_id')->nullable();
+            $table->uuid('signature_id')->nullable();
             $table->foreign('signature_id')
                 ->references('id')
                 ->on('signatures')
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignId('semester_id')->nullable();
+            $table->uuid('semester_id')->nullable();
             $table->foreign('semester_id')
                 ->references('id')
                 ->on('semesters')

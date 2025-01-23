@@ -4,6 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\User\User;
+use App\Rules\PhoneValidation;
 use Illuminate\Validation\Rules;
 
 class UserStoreRequest extends FormRequest
@@ -42,7 +43,7 @@ class UserStoreRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'phone_number' => ['required', 'string', 'max:20', 'regex:/^\+?[1-9]\d{1,14}$/'],
+            'phone_number' => ['required', new PhoneValidation],
             'document' => ['required', 'string', 'max:15', 'unique:users,document'],
             'city' => ['required', 'string', 'max:255'],
             'postal_code' => ['required', 'string', 'max:10'],
@@ -88,22 +89,32 @@ class UserStoreRequest extends FormRequest
             'name.required' => 'The :attribute field is required.',
             'name.string' => 'The :attribute must be a string.',
             'name.max' => 'The :attribute may not be greater than 255 characters.',
+
             'email.required' => 'The :attribute field is required.',
             'email.email' => 'The :attribute must be a valid email address.',
             'email.unique' => 'This :attribute is already taken.',
+
             'password.required' => 'The :attribute field is required.',
             'password.confirmed' => 'The :attribute confirmation does not match.',
+
             'phone_number.required' => 'The :attribute field is required.',
-            'phone_number.regex' => 'The :attribute must be a valid phone number.',
+            'phone_number.string' => 'The :attribute must be a string.',
+            
             'document.required' => 'The :attribute field is required.',
             'document.unique' => 'This :attribute already exists.',
+
             'city.required' => 'The :attribute field is required.',
+
             'postal_code.required' => 'The :attribute field is required.',
+
             'address.required' => 'The :attribute field is required.',
+
             'date_of_birth.required' => 'The :attribute field is required.',
             'date_of_birth.before' => 'The :attribute must be before today.',
+
             'country_id.required' => 'The :attribute field is required.',
             'country_id.exists' => 'The selected :attribute is invalid.',
+            
             'role.in' => 'The :attribute must be one of the following values: admin, professor, student.',
         ];
     }

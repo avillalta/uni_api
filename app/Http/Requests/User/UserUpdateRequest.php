@@ -4,6 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\User\User;
+use App\Rules\PhoneValidation;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\Rule;
 
@@ -44,7 +45,7 @@ class UserUpdateRequest extends FormRequest
             'name' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($userId)],//ignore($this->user()->id)
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique("users")->ignore($userId)], // Permitir el correo electrónico actual
             'password' => ['nullable', 'confirmed', Rules\Password::defaults()], // Si el campo de contraseña es nulo, no se valida
-            'phone_number' => ['nullable', 'string', 'max:20', 'regex:/^\+?[1-9]\d{1,14}$/'],
+            'phone_number' => ['nullable', new PhoneValidation],
             'document' => ['nullable', 'string', 'max:15', Rule::unique('users')->ignore($userId)], // Permitir el documento actual
             'city' => ['nullable', 'string', 'max:255'],
             'postal_code' => ['nullable', 'string', 'max:10'],
@@ -81,8 +82,6 @@ class UserUpdateRequest extends FormRequest
             
             'phone_number.nullable' => 'The :attribute field is optional.',
             'phone_number.string' => 'The :attribute must be a string.',
-            'phone_number.max' => 'The :attribute may not be greater than 20 characters.',
-            'phone_number.regex' => 'The :attribute must be a valid phone number.',
             
             'document.nullable' => 'The :attribute field is optional.',
             'document.string' => 'The :attribute must be a string.',

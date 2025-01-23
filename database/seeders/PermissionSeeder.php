@@ -19,17 +19,19 @@ class PermissionSeeder extends Seeder
 
         $models = [
             'User',
-            'Country',
+            'Semester',
+            'Signature',
+            'Course',
+            'Enrollment',
+            'Grade',
+            'Content',
         ];
 
         foreach($models as $model){
             foreach($actions as $action) {
                 $permissionName = "{$action}-{$model}";
 
-                Permission::updateOrCreate(
-                    ['name' => $permissionName],
-                    ['name' => $permissionName]
-                );
+                Permission::updateOrCreate(['name' => $permissionName]);
             }
         }
     }

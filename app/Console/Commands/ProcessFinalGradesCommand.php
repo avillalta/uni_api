@@ -37,17 +37,30 @@ class ProcessFinalGradesCommand extends Command
             return;
         }
 
+        // Verify if semester has been processed
+        if ($semester->is_processed) {
+            $this->info("Semester {$semester->id} has already been processed.");
+            return;
+        }
+
         $this->info("Initiating: The process of calculating final grades for semester {$semester->id}...");
 
-        // Obtener el número total de enrollments en el semestre actual
-        $totalEnrollmentRecords = $semester->enrollments()->count();
+        $batchSize = 100; // Tamaño del bloque
+        $totalProcessed = 0;
 
-        if ($totalEnrollmentRecords > 0) {
-            $this->info("Dispatching jobs for {$totalEnrollmentRecords} enrollments...");
-            Helper::dispatchJobHelper($this, CalculateFinalGradeJob::class, Enrollment::class, $totalEnrollmentRecords, 100); // batchSize = 100
-        } else {
-            $this->info('No enrollments require final grade calculation.');
-        }
+        Enrollment::where('semester_id', $semester->id)
+            ->chunk($batchSize, function ($enrollments) use (&$totalProcessed) {
+                foreach ($enrollments as $enrollment) {
+                    // Dispatched a job to calculate each enrollments final grade
+                    CalculateFinalGradeJob::dispatch($enrollment->id);
+                    $totalProcessed++;
+                }
+            });
+
+        $this->info("Dispatched jobs for {$totalProcessed} enrollments.");
+
+        $semester->update(['is_processed' => true]);
+        $this->info("Semester {$semester->id} has been marked as processed.");
 
         $this->info('Completed: Final Grade Calculation Process.');
     }

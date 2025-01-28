@@ -18,13 +18,13 @@ class PermissionSeeder extends Seeder
         ];
 
         $models = [
-            'User',
-            'Semester',
-            'Signature',
-            'Course',
-            'Enrollment',
-            'Grade',
-            'Content',
+            'users',
+            'semesters',
+            'signatures',
+            'courses',
+            'enrollments',
+            'grades',
+            'contents', 
         ];
 
         foreach($models as $model){

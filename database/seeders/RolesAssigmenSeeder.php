@@ -15,14 +15,31 @@ class RolesAssigmenSeeder extends Seeder
         $professorRole = Role::findByName('professor');
         $adminRole = Role::findByName('admin');
 
-        $viewSemesterPermission = Permission::whereName('view-Semester')->first();
+        $roles = [
+            'admin' => Permission::all(),
+            'professor' => [
+                'view-users',
+                'view-semesters',
+                'view-signatures',
+                'view-courses', 'create-courses', 'edit-courses',
+                'view-enrollments', 'create-enrollments', 'edit-enrollments',
+                'view-grades', 'create-grades', 'edit-grades', 'delete-grades',
+                'view-contents', 'create-contents', 'edit-contents', 'delete-contents',
+            ],
+            'student' => [
+                'view-users',
+                'view-semesters',
+                'view-signatures',
+                'view-courses',
+                'view-enrollments',
+                'view-grades',
+                'view-contents',
+            ],
+        ];
 
-        $viewCountryPermission = Permission::whereName('view-Country')->first();
-
-    
-        $allPermissions = Permission::all();
-
-
-        $adminRole->syncPermissions($allPermissions);
+        foreach ($roles as $roleName => $permissions) {
+            $role = Role::findByName($roleName);
+            $role->syncPermissions($permissions);
+        }
     }
 }

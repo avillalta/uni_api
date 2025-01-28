@@ -3,36 +3,61 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\User\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    // Método para iniciar sesión
+    public function login(LoginRequest $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken; // Generar token
+            $token = $user->createToken('auth_token')->plainTextToken;
+            $result = new UserResource($user);
             return response()->json([
                 'token' => $token,
-                'user' => $user,
-                'roles' => $user->getRoleNames(), // Roles del usuario (si usas Spatie)
-            ]);
+                'user' => $result], 200);
         }
 
-        return response()->json(['error' => 'Credenciales inválidas'], 401);
+        return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
-    // Logout
+    // Método para registrar un nuevo usuario
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return response()->json(['token' => $token], 201);
+    }
+
+    // Método para cerrar sesión
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete(); // Revocar todos los tokens del usuario
-        return response()->json(['message' => 'Sesión cerrada correctamente']);
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out successfully'], 200);
+    }
+
+    // Método para obtener información del usuario autenticado
+    public function user(Request $request)
+    {
+        return response()->json($request->user());
     }
 }

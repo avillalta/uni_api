@@ -16,19 +16,21 @@ class CalculateFinalGradeJob implements ShouldQueue
 {
     use Dispatchable , InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct(public string $model, public int $offset, public int $limit)
+    public function __construct(public string $enrollmentId)
     {
     }
 
     public function handle(FinalGradeService $finalGradeService): void
     {
-        $records = Enrollment::where('semester_id', $this->model)
-            ->offset($this->offset)
-            ->limit($this->limit)
-            ->get();
+        // Find the enrollment by ID
+        $enrollment = Enrollment::find($this->enrollmentId);
 
-        foreach ($records as $enrollment) {
+        if ($enrollment) {
+            // Calculate the final grade for the enrollment
             $finalGradeService->calculateFinalGrade($enrollment);
+        } else {
+            // Log an error if the enrollment is not found
+            Log::error("Enrollment not found: {$this->enrollmentId}");
         }
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Content\ContentController;
 use App\Http\Controllers\Enrollment\EnrollmentController;
 use Illuminate\Http\Request;
@@ -9,36 +10,43 @@ use App\Http\Controllers\Semester\SemesterController;
 use App\Http\Controllers\Signature\SignatureController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Grade\GradeController;
+use Laravel\Sanctum\Sanctum;
 
 Route::prefix('v1')->group(function () {
-    //Route::middleware('auth:sanctum')->group(function () {
-        Route::resource('users', UserController::class)->only([
-            'index', 'store', 'show', 'update', 'destroy'
-        ]);
 
-        Route::resource('semesters', SemesterController::class)->only([
-            'index', 'store', 'show', 'update', 'destroy'
-        ]);
+    // Public Routes
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+        
+    // Protected Routes
+    Route::middleware('auth:sanctum')->group(function () {
 
-        Route::resource('signatures', SignatureController::class)->only([
-            'index', 'store', 'show', 'update', 'destroy'
-        ]);
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/user', [AuthController::class, 'user']); 
 
-        Route::resource('courses', CourseController::class)->only([
-            'index', 'store', 'show', 'update', 'destroy'
-        ]);
+        Route::middleware('role:admin')->group(function () {
+            Route::apiResource('users', UserController::class);
+            Route::apiResource('semesters', SemesterController::class);
+            Route::apiResource('signatures', SignatureController::class);
+            Route::apiResource('courses', CourseController::class);
+            Route::apiResource('enrollments', EnrollmentController::class);
+            Route::apiResource('grades', GradeController::class);
+            Route::apiResource('contents', ContentController::class);  
+        });
 
-        Route::resource('enrollments', EnrollmentController::class)->only([
-            'index', 'store', 'show', 'update', 'destroy'
-        ]);
+        Route::middleware('role:professor')->group(function () {
+            Route::apiResource('courses', CourseController::class)->except(['destroy']);
+            Route::apiResource('enrollments', EnrollmentController::class)->except(['destroy']);
+            Route::apiResource('grades', GradeController::class)->except(['destroy']);
+            Route::apiResource('contents', ContentController::class)->except(['destroy']);
+        });
 
-        Route::resource('grades', GradeController::class)->only([
-            'index', 'store', 'show', 'update', 'destroy'
-        ]);
-
-        Route::resource('contents', ContentController::class)->only([
-            'index', 'store', 'show', 'update', 'destroy'
-        ]);
-    //});
+        Route::middleware('role:student')->group(function () {
+            Route::get('/courses', [CourseController::class, 'index']);
+            Route::get('/enrollments', [EnrollmentController::class, 'index']);
+            Route::get('/grades', [GradeController::class, 'index']);
+            Route::get('/contents', [ContentController::class, 'index']);
+        });
+    });
 
 });

@@ -11,23 +11,6 @@ use Illuminate\Support\Facades\DB;
 class FinalGradeService{
 
     /**
-     * Calculate final grades for all enrollments in a semester.
-     *
-     * @param Semester $semester
-     * @return void
-     */
-    public function calculateForSemester(Semester $semester): void
-    {
-        $enrollments = Enrollment::whereHas('course', function ($query) use ($semester) {
-            $query->where('semester_id', $semester->id);
-        })->get();
-
-        foreach ($enrollments as $enrollment) {
-            $finalGrade = $this->calculateFinalGrade($enrollment);
-        }
-    }
-
-    /**
      * Calculate the final grade for a given enrollment.
      *
      * @param Enrollment $enrollment

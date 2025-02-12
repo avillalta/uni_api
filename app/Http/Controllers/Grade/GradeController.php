@@ -28,7 +28,7 @@ class GradeController extends Controller
      */
     public function index()
     {
-        $this->GradeService->getAllGrades();
+        $result = $this->GradeService->getAllGrades();
 
         if (isset($result[0]) && $result[0] instanceof Grade) {
             $result = GradeResource::collection($result);

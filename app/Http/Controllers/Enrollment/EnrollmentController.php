@@ -29,7 +29,7 @@ class EnrollmentController extends Controller
      */
     public function index()
     {
-        $this->EnrollmentService->getAllEnrollments();
+        $result = $this->EnrollmentService->getAllEnrollments();
 
         if (isset($result[0]) && $result[0] instanceof Enrollment) {
             $result = EnrollmentResource::collection($result);
@@ -46,11 +46,15 @@ class EnrollmentController extends Controller
         $data = $request->validated();
         $result = $this->EnrollmentService->saveEnrollment($data);
 
+        if (optional($result)['example'] == false) {
+            return $this->errorResponse($result['message'], $result['httpStatus']);
+        }
+
         if ($result instanceof Enrollment) {
             $result = new EnrollmentResource($result);
         }
 
-        return $this->successResponse($result, Response::HTTP_CREATED);
+        //return $this->successResponse($result, Response::HTTP_CREATED);
     }
 
     /**

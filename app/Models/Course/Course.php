@@ -2,7 +2,10 @@
 
 namespace App\Models\Course;
 
+use App\Http\Scopes\StudentScope;
 use App\Models\Content\Content;
+use App\Models\Enrollment\Enrollment;
+use App\Models\Scopes\ProfessorScope;
 use App\Models\Semester\Semester;
 use App\Models\Signature\Signature;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -35,8 +38,20 @@ class Course extends Model
         return $this->belongsTo(Semester::class, 'semester_id');
     }
 
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
     public function contents()
     {
-        return $this->hasMany(Content::class); 
+        return $this->hasMany(Content::class);
+    }
+
+    protected static function booted()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new ProfessorScope);
     }
 }

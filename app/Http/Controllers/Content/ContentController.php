@@ -28,7 +28,7 @@ class ContentController extends Controller
      */
     public function index()
     {
-        $this->ContentService->getAllContents();
+        $result = $this->ContentService->getAllContents();
 
         if (isset($result[0]) && $result[0] instanceof Content) {
             $result = ContentResource::collection($result);

@@ -26,15 +26,22 @@ class CourseUpdateRequest extends FormRequest
             'weighting' => ['sometimes', 'array', 'size:3'], // Optional, must be an array with 3 elements
             'weighting.homework' => ['required_with:weighting', 'numeric', 'min:0', 'max:1'],
             'weighting.midterms' => ['required_with:weighting', 'numeric', 'min:0', 'max:1'],
-            'weighting.final_exam' => ['required_with:weighting', 'numeric', 'min:0', 'max:1'],
-            'weighting.*' => function ($attribute, $value, $fail) {
-                if (request('weighting') && array_sum(request('weighting')) !== 1) {
-                    $fail('The weighting values must add up to 1.');
-                }
-            },
+            'weighting.final_exam' => ['sometimes', 'numeric', 'min:0', 'max:1'],
             'signature_id' => ['sometimes', 'uuid', 'exists:signatures,id'],
             'semester_id' => ['sometimes', 'uuid', 'exists:semesters,id'],
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $weighting = $this->input('weighting', []);
+            $sum = array_sum($weighting);
+            
+            if (abs($sum - 1) > 0.0001) {
+                $validator->errors()->add('weighting', 'The weighting values must add up to 1.');
+            }
+        });
     }
 
     public function messages(): array

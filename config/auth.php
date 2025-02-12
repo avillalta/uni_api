@@ -42,8 +42,8 @@ return [
         ],
 
         'api' => [
-        'driver' => 'sanctum', 
-        'provider' => 'users', 
+            'driver' => 'sanctum', 
+            'provider' => 'users', 
         ],
     ],
 
@@ -70,7 +70,11 @@ return [
             'model' => env('AUTH_MODEL', App\Models\User\User::class),
             'key_type' => 'uuid',
         ],
-
+        
+        'roles' => [
+            'driver' => 'eloquent',
+            'model' => Spatie\Permission\Models\Role::class,
+    ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

@@ -14,22 +14,23 @@ class EnrollmentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $this->loadMissing('course.semester');
         //return parent::toArray($request);
         return [
             'id' => $this->id,
             'enrollment_date' => $this->enrollment_date,
             'course' => [
                 'id' => $this->course_id,
-                'name' => $this->course->name,
+                'schedule' => $this->course->schedule,
             ],
             'signature' => [
                 'id' => $this->course->signature->signature_id,
                 'name' => $this->course->signature->name,
             ],
             'semester' => [
-                'id' => $this->course->semesters->first()->id,
-                'start_date' => $this->course->semesters->first()->start_date,
-                'end_date' => $this->course->semesters->first()->end_date,
+                'id' => $this->course->semester->first()->id,
+                'start_date' => $this->course->semester->first()->start_date,
+                'end_date' => $this->course->semester->first()->end_date,
             ],
             'student' => [
                 'id' => $this->student_id,

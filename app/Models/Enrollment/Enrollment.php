@@ -2,9 +2,11 @@
 
 namespace App\Models\Enrollment;
 
+use App\Models\Scopes\StudentScope;
 use App\Models\Course\Course;
 use App\Models\Evaluation\Evaluation;
 use App\Models\Grade\Grade;
+use App\Models\Scopes\ProfessorScope;
 use App\Models\Signature\Signature;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -43,5 +45,14 @@ class Enrollment extends Model
     public function grades()
     {
         return $this->hasMany(Grade::class, 'enrollment_id');
+    }
+
+    protected static function booted()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new StudentScope);
+
+        static::addGlobalScope(new ProfessorScope);
     }
 }

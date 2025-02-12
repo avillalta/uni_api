@@ -35,10 +35,10 @@ class GradeService{
 
         return DB::transaction(function() use ($data){
             return Grade::create([
-                'schedule' => $data['schedule'],
-                'weighting' => $data['weighting'],
-                'signature_id' => $data['signature_id'],
-                'semester_id' => $data['semester_id'],
+                'grade_type' => $data['grade_type'],
+                'grade_value' => $data['grade_value'],
+                'grade_date' => $data['grade_date'],
+                'enrollment_id' => $data['enrollment_id'],
             ]);
         });
     }
@@ -67,10 +67,10 @@ class GradeService{
 
         return DB::transaction(function() use ($grade, $data){
             $updates =  [
-                'schedule' => $data['schedule'] ?? $grade->schedule,
-                'weighting' => $data['weighting'] ?? $grade->weighting,
-                'signature_id' => $data['signature_id'] ?? $grade->signature_id,
-                'semester_id' => $data['semester_id'] ?? $grade->semester_id,
+                'grade_type' => $data['grade_type'] ?? $grade->grade_type,
+                'grade_value' => $data['grade_value'] ?? $grade->grade_value,
+                'grade_date' => $data['grade_date'] ?? $grade->grade_date,
+                'enrollment_id' => $data['enrollment_id'] ?? $grade->enrollment_id,
             ];
             $grade->update($updates);
             return $grade;

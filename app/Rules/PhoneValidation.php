@@ -29,10 +29,14 @@ class PhoneValidation implements ValidationRule
             return;
          }
         
-        // Validar el formato E.164
-        if (!preg_match('/^\+(?:[0-9] ?){6,14}[0-9]$/', $value)) {
-            $fail("El :attribute debe ser un número de teléfono válido. Ej: +34 XXX XXX XXX o +1 (XXX) XXX-XXXX"); 
+        // Si el número no empieza con "+", se le añade el código de España (+34)
+        if (!preg_match('/^\+/', $value)) {
+            $value = '+34' . $value;
         }
 
+        // Validar el formato E.164
+        if (!preg_match('/^\+[1-9]\d{6,14}$/', $value)) {
+            $fail("El :attribute debe ser un número de teléfono válido en formato E.164. Ejemplo: +34123456789");
+        }
     }
 }

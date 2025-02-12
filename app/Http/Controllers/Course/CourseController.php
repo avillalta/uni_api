@@ -29,7 +29,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $this->CourseService->getAllCourses();
+        $result = $this->CourseService->getAllCourses();
 
         if (isset($result[0]) && $result[0] instanceof Course) {
             $result = CourseResource::collection($result);

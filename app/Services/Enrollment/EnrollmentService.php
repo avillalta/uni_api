@@ -4,11 +4,14 @@ namespace App\Services\Enrollment;
 
 use App\Models\Enrollment\Enrollment;
 use App\Models\Signature\Signature;
+use App\Models\User\User;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use PhpParser\Node\Expr\FuncCall;
@@ -32,6 +35,14 @@ class EnrollmentService{
      * @return \App\Models\Enrollment
      */
     public function saveEnrollment(array $data) {
+
+        if (!auth()->user()->can('create-enrollments')) {
+            return [
+                'example' => false,
+                'httpStatus' => Response::HTTP_FORBIDDEN,
+                'message' => "No tienes permiso para realizar esta acción."
+            ];
+        }
 
         return DB::transaction(function() use ($data){
             return Enrollment::create([
